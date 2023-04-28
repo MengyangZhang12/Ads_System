@@ -1,0 +1,76 @@
+#单节点配置
+spring:
+  application:
+    name: ad-eureka
+
+server:
+  port: 8000
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+#    是否将自己注册到eureka server，默认为true，本机为单机版，设置为false
+    registerWithEureka: false
+
+#    本机为单机版，不用同步其他server节点，设置为false
+    fetchRegistry: false
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+
+
+##高可用多节点配置
+#---
+#spring:
+#  application:
+#    name: ad-eureka
+#  profiles: server1
+#server:
+#  port: 8000
+#eureka:
+#  instance:
+#    hostname: server1
+#    # 是否使用ip地址注册，默认是false，这里是单节点，所以也需要false
+#    prefer-ip-address: false
+#  client:
+#    service-url:
+#      #互相注册
+#      defaultZone: http://server2:8001/eureka/,http://server3:8002/eureka/
+#
+#---
+#spring:
+#  application:
+#    name: ad-eureka
+#  profiles: server2
+#server:
+#  port: 8001
+#eureka:
+#  instance:
+#    hostname: server2
+#    prefer-ip-address: false
+#  client:
+#    service-url:
+#      defaultZone: http://server1:8000/eureka/,http://server3:8002/eureka/
+#
+#---
+#spring:
+#  application:
+#    name: ad-eureka
+#  profiles: server3
+#server:
+#  port: 8002
+#eureka:
+#  instance:
+#    hostname: server3
+#    prefer-ip-address: false
+#  client:
+#    service-url:
+#      defaultZone: http://server1:8000/eureka/,http://server2:8001/eureka/
+
+#打包命令：
+#mvn clean package -Dmaven.test.skip=true -U
+#
+#启动：
+#java -jar ad-eureka-1.0-SNAPSHOT.jar --spring.profiles.active=server1
+#java -jar ad-eureka-1.0-SNAPSHOT.jar --spring.profiles.active=server2
+#java -jar ad-eureka-1.0-SNAPSHOT.jar --spring.profiles.active=server3
